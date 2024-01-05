@@ -9,15 +9,50 @@ import {useMediaQuery} from "usehooks-ts";
 export const Navigation = () => {
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
-
-
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ElementRef<"aside">>(null);
     const navbarRef = useRef<ElementRef<"div">>(null);
     const [isResetting, setisResetting] = useState(false);
-    const[isCollapsed, setisCollapsed] = useState(isMobile);
+    const[isCollapsed, setIsCollapsed] = useState(isMobile);
 
+    
+    const handleMouseDown = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        event.preventDefault();
+        event.stopPropagation();
+        isResizingRef.current = true;
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
 
+    const handleMouseMove = (event: MouseEvent) => {
+        if (!isResizingRef.current) return;
+        let newWidth = event.clientX;
+
+        if (newWidth < 240) newWidth = 240;
+        if (newWidth > 480) newWidth = 480;
+
+        if (sidebarRef.current && navbarRef.current) {
+            sidebarRef.current.style.width = `${newWidth}px`;
+            navbarRef.current.style.setProperty("left", `${newWidth}px`);
+            navbarRef.current.style.setProperty("width", `calc(100% - ${newWidth}px)`);
+          }
+    }
+
+    const handleMouseUp = () => {
+        isResizingRef.current = false;
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    const resetWidth = () => {
+        if (sidebarRef.current && navbarRef.current){
+            setIsCollapsed(false);
+            setisResetting(true);
+
+        }
+    }
 
     return(
         <>
@@ -44,8 +79,8 @@ export const Navigation = () => {
                 </div>
                 /* This line appears when we hover over the sidebar */
                 <div 
-                onMouseDown = {() => ()}
-                onClick = {() => ()}
+                    onMouseDown = {handleMouseDown}
+                    onClick = {() => {}}
                 className="opacity-0 group-hover/sidebar:opacity-100 trainsition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0"
                 />
             </aside>
