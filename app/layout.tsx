@@ -29,7 +29,7 @@ export default function RootLayout({
         <ConvexClientProvider>
 
           <ThemeProvider attribute = "class" defaultTheme = "system" enableSystem disableTransitionOnChange storageKey='notion-clone'>
-            
+            <Toaster position = "bottom-center"/>
             {children}
             
           </ThemeProvider>
