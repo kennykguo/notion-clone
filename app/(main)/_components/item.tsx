@@ -11,6 +11,8 @@ interface ItemProps{
     expand?: boolean;
     isSearch?: boolean;
     level?: number;
+    onExpand?: () => void;
+    expanded?: boolean;
     label: string;
     onClick: () => void;
     icon: LucideIcon;
@@ -18,7 +20,7 @@ interface ItemProps{
 
 export const Item = ({
     id,
-    label,
+    label, 
     onClick,
     icon: Icon,
     active,
@@ -50,9 +52,7 @@ export const Item = ({
                     role = "button"
                     className="h-full rounded-sm hover:bg-neural-300 dark:bg-neural-600 mr-1"
                     onClick = {()=> {}}
-                
                 >
-                    
                     <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50"/>
                 </div>
             )}
